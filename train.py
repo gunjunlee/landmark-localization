@@ -48,11 +48,11 @@ if __name__ == '__main__':
             with torch.set_grad_enabled(True):
                 # pdb.set_trace()
                 outputs = F.sigmoid(net(batch_images))
-                outputs = outputs / outputs.max()
-                batch_masks = batch_masks / batch_masks.max()
+                # outputs = outputs / outputs.max()
+                # batch_masks = batch_masks / batch_masks.max()
                 loss = (outputs - batch_masks) *\
                         (outputs - batch_masks)
-                loss = loss.max()
+                loss = loss.mean()
                 loss.backward()
                 optimizer.step()
                 

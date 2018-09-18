@@ -58,7 +58,7 @@ class LandmarkDataset(torch.utils.data.Dataset):
         for i in range(0, 4):
             coords_img[i][coords[i][0]][coords[i][1]] = 1
             
-        img = torch.from_numpy(img).permute((2, 0, 1)) / 255
+        img = torch.from_numpy(img).permute((2, 0, 1)).float() / 255
         coords_img = torch.from_numpy(coords_img).unsqueeze(dim=1)
         # pdb.set_trace()
         
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     img, coords_img = dataset[0]
 
     plt.subplot(231)
-    plt.imshow(img.numpy())
+    plt.imshow(img.permute((1, 2, 0)).numpy())
 
     plt.subplot(232)
     plt.imshow(coords_img.numpy()[0])
