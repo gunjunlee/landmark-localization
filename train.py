@@ -59,5 +59,5 @@ if __name__ == '__main__':
             train_running_loss += loss.item() * batch_images.size(0)
         
         print('loss: {}'.format(train_running_loss/len(dataset)))
-        if train_running_loss/len(dataset) < 0.1: pdb.set_trace()
+        # if train_running_loss/len(dataset) < 0.1: pdb.set_trace()
             
