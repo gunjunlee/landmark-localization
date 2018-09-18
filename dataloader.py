@@ -43,47 +43,25 @@ class LandmarkDataset(torch.utils.data.Dataset):
         img = Image.open(os.path.join(self.image_dir, self.images[idx])).convert('RGB')
         w, h = img.size
         img = np.array(img.resize((224, 224)))
+        img = transforms.ToTensor()(img)
+        img = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])(img)
 
         with open(os.path.join(self.landmark_dir, self.landmarks[idx])) as f:
             coords = f.readline().strip().split(' ')
             assert(len(coords) == 8)
             coords = np.array(coords).reshape(4, 2).astype(float)
 
-        coords = coords / np.array([w, h]) * np.array([224, 224])
-        coords = coords.astype(int)
+        coords = coords / np.array([w, h])
         coords = coords[:, ::-1]
         # print(coords)
+        coords = torch.from_numpy(coords.copy())
 
-        coords_img = np.zeros((4, 224, 224))
-        for i in range(0, 4):
-            coords_img[i][coords[i][0]][coords[i][1]] = 1
-            
-        img = torch.from_numpy(img).permute((2, 0, 1)).float() / 255
-        coords_img = torch.from_numpy(coords_img).unsqueeze(dim=1)
-        # pdb.set_trace()
-        
-        coords_img = F.conv2d(coords_img, self.filter, stride=1, padding=4)
-        # print(coords_img.shape)
-        coords_img = coords_img.view((4, 224, 224))
-        
-        return img.float(), coords_img.float()
+        return img.float(), coords.float()
         
 
 if __name__ == '__main__':
     dataset = LandmarkDataset()
-    img, coords_img = dataset[0]
-
-    plt.subplot(231)
-    plt.imshow(img.permute((1, 2, 0)).numpy())
-
-    plt.subplot(232)
-    plt.imshow(coords_img.numpy()[0])
-    plt.subplot(233)
-    plt.imshow(coords_img.numpy()[1])
-    plt.subplot(235)
-    plt.imshow(coords_img.numpy()[2])
-    plt.subplot(236)
-    plt.imshow(coords_img.numpy()[3])
-    plt.show()
-
+    img, coords = dataset[0]
+    print(img, coords)
+    pdb.set_trace()
     
