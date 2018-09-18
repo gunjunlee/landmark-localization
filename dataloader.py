@@ -54,6 +54,7 @@ class LandmarkDataset(torch.utils.data.Dataset):
         coords = coords.astype(int)
         coords = coords[:, ::-1]
         # print(coords)
+        coords = torch.from_numpy(coords.copy())
 
         coords_img = np.zeros((4, self.image_size, self.image_size))
         for i in range(0, 4):
@@ -72,19 +73,7 @@ class LandmarkDataset(torch.utils.data.Dataset):
 
 if __name__ == '__main__':
     dataset = LandmarkDataset()
-    img, coords_img = dataset[0]
-
-    plt.subplot(231)
-    plt.imshow(img.permute((1, 2, 0)).numpy())
-
-    plt.subplot(232)
-    plt.imshow(coords_img.numpy()[0])
-    plt.subplot(233)
-    plt.imshow(coords_img.numpy()[1])
-    plt.subplot(235)
-    plt.imshow(coords_img.numpy()[2])
-    plt.subplot(236)
-    plt.imshow(coords_img.numpy()[3])
-    plt.show()
-
+    img, coords = dataset[0]
+    print(img, coords)
+    pdb.set_trace()
     

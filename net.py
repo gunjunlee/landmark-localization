@@ -3,9 +3,9 @@ import torch.nn as nn
 import torchvision
 from torchvision import models, transforms
 
-class CostumNet(nn.Module):
+class CustomNet(nn.Module):
     def __init__(self, n_classes=4):
-        super(CostumNet, self).__init__()
+        super(CustomNet, self).__init__()
         
         self.resnet = models.resnet18(pretrained=True)
         self.resnet.fc = nn.Linear(512, 2 * n_classes, bias=True)
